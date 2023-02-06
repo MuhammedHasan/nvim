@@ -44,3 +44,4 @@ stime
 plugin/packer_compiled.lua
 .git/*
 lazy-lock.json
+.jukit
