@@ -1,7 +1,7 @@
 local M = {
   "nvim-neotest/neotest",
   dependencies = {
-    "olimorris/neotest-rspec",
+    "nvim-neotest/neotest-python",
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     "antoinemadec/FixCursorHold.nvim",
@@ -14,7 +14,7 @@ function M.config()
     return
   end
 
-  local status_rspec_ok, rspec = pcall(require, "neotest-rspec")
+  local status_rspec_ok, pytest = pcall(require, "neotest-python")
   if not status_rspec_ok then
     return
   end
@@ -23,7 +23,7 @@ function M.config()
 
   neotest.setup({
     adapters = {
-      rspec({ rspec_cmd = { "bundle", "exec", "rspec" } }),
+      pytest({ runner = "pytest" }),
     },
     icons = {
       running_animated = icons.running_animated,
