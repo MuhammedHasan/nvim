@@ -78,7 +78,7 @@ function M.config()
       info = icons.Information,
     },
   })
-  lsp.ensure_installed({ "sumneko_lua" })
+  lsp.ensure_installed({ "pyright", "sumneko_lua" })
   lsp.configure("sumneko_lua", sumneko_lua_opts)
   lsp.on_attach(function(client, bufnr)
     if vim.b.lsp_attached then
@@ -99,13 +99,14 @@ function M.config()
     debug = false,
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.jq,
       null_ls.builtins.formatting.stylua,
     },
   })
 
   mason_null_ls.setup({
-    ensure_installed = { "jq", "shellcheck", "stylua" },
+    ensure_installed = { "black", "jq", "shellcheck", "stylua" },
     automatic_installation = true,
     automatic_setup = true,
   })
