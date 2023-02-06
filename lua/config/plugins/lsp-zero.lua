@@ -60,7 +60,6 @@ function M.config()
   local icons = require("config.icons").diagnostics
 
   local sumneko_lua_opts = require("config.lsp.sumneko_lua")
-  local solargraph_opts = require("config.lsp.solargraph")
 
   require("mason.settings").set({ ui = { border = "rounded" } })
   lsp.preset("recommended")
@@ -79,9 +78,8 @@ function M.config()
       info = icons.Information,
     },
   })
-  lsp.ensure_installed({ "solargraph", "sumneko_lua", "tsserver" })
+  lsp.ensure_installed({ "sumneko_lua" })
   lsp.configure("sumneko_lua", sumneko_lua_opts)
-  lsp.configure("solargraph", solargraph_opts)
   lsp.on_attach(function(client, bufnr)
     if vim.b.lsp_attached then
       return
@@ -101,19 +99,13 @@ function M.config()
     debug = false,
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
-      null_ls.builtins.diagnostics.vale,
-      null_ls.builtins.formatting.erb_lint,
       null_ls.builtins.formatting.jq,
-      null_ls.builtins.formatting.prettierd.with({
-        env = { PRETTIERD_DEFAULT_CONFIG = vim.fn.expand("~/.config/prettier/config.json") },
-      }),
-      null_ls.builtins.formatting.standardrb,
       null_ls.builtins.formatting.stylua,
     },
   })
 
   mason_null_ls.setup({
-    ensure_installed = { "erb_lint", "jq", "prettierd", "shellcheck", "standardrb", "stylua", "tsserver", "vale" },
+    ensure_installed = { "jq", "shellcheck", "stylua" },
     automatic_installation = true,
     automatic_setup = true,
   })
