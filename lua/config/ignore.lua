@@ -24,7 +24,6 @@ local ignore = {
     "%.exe",
     "%.flac",
     "%.ico",
-    "%.ipynb",
     "%.jar",
     "%.jpeg",
     "%.jpg",
