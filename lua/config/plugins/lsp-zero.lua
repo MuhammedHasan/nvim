@@ -59,7 +59,7 @@ function M.config()
 
   local icons = require("config.icons").diagnostics
 
-  local sumneko_lua_opts = require("config.lsp.sumneko_lua")
+  local lua_ls_opts = require("config.lsp.lua_ls")
 
   require("mason.settings").set({ ui = { border = "rounded" } })
   lsp.preset("recommended")
@@ -78,21 +78,21 @@ function M.config()
       info = icons.Information,
     },
   })
-  lsp.ensure_installed({ "pyright", "sumneko_lua" })
-  lsp.configure("sumneko_lua", sumneko_lua_opts)
+  lsp.ensure_installed({ "pyright", "lua_ls", "tsserver" })
+  lsp.configure("lua_ls", lua_ls_opts)
   lsp.on_attach(function(client, bufnr)
     if vim.b.lsp_attached then
       return
     end
     vim.b.lsp_attached = true
-    if client.name == "sumneko_lua" then
+    if client.name == "lua_ls" then
       neodev.setup({})
     end
     if client.server_capabilities["documentSymbolProvider"] then
       navic.attach(client, bufnr)
     end
   end)
-  lsp.nvim_workspace(sumneko_lua_opts)
+  lsp.nvim_workspace(lua_ls_opts)
   lsp.setup()
 
   null_ls.setup({
@@ -106,7 +106,7 @@ function M.config()
   })
 
   mason_null_ls.setup({
-    ensure_installed = { "black", "jq", "shellcheck", "stylua" },
+    ensure_installed = { "taplo", "black", "jq", "shellcheck", "stylua" },
     automatic_installation = true,
     automatic_setup = true,
   })

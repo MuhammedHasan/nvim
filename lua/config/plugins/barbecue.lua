@@ -1,5 +1,6 @@
 local M = {
   "utilyre/barbecue.nvim",
+  branch = "fix/E36",
   dependencies = {
     "neovim/nvim-lspconfig",
     "SmiteshP/nvim-navic",
@@ -13,11 +14,7 @@ function M.config()
     return
   end
 
-  local icons_ok, icons = pcall(require, "config.icons")
-  if not icons_ok then
-    return
-  end
-
+  local icons = require("config.icons").barbecue
   local ignore = require("config.ignore")
 
   barbecue.setup({
@@ -41,7 +38,7 @@ function M.config()
       separator = "▸ ", -- entry separator
     },
     -- icons for different context entry kinds
-    kinds = icons.barbecue, -- `false` to disable kind icons
+    kinds = icons, -- `false` to disable kind icons
   })
 end
 
