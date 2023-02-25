@@ -57,6 +57,11 @@ function M.config()
     return
   end
 
+  local status_rust_tools_ok, rust_tools = pcall(require, "rust-tools")
+  if not status_rust_tools_ok then
+    return
+  end
+
   local icons = require("config.icons").diagnostics
 
   local lua_ls_opts = require("config.lsp.lua_ls")
@@ -78,8 +83,9 @@ function M.config()
       info = icons.Information,
     },
   })
-  lsp.ensure_installed({ "pyright", "lua_ls", "tsserver" })
+  lsp.ensure_installed({ "lua_ls", "pyright", "rust_analyzer" })
   lsp.configure("lua_ls", lua_ls_opts)
+  lsp.skip_server_setup({ "rust_analyzer" })
   lsp.on_attach(function(client, bufnr)
     if vim.b.lsp_attached then
       return
@@ -95,18 +101,32 @@ function M.config()
   lsp.nvim_workspace(lua_ls_opts)
   lsp.setup()
 
+  local install_root_dir = vim.fn.stdpath("data") .. "/mason"
+  local extension_path = install_root_dir .. "/packages/codelldb/extension/"
+  local codelldb_path = extension_path .. "adapter/codelldb"
+  local liblldb_path = extension_path .. "adapter/libcodelldb.so"
+
+  local rust_lsp = lsp.build_options("rust_analyzer", { single_file_support = false })
+  rust_tools.setup({
+    server = rust_lsp,
+    dap = {
+      adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+    },
+  })
+
   null_ls.setup({
     debug = false,
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.jq,
+      null_ls.builtins.formatting.rustfmt,
       null_ls.builtins.formatting.stylua,
     },
   })
 
   mason_null_ls.setup({
-    ensure_installed = { "taplo", "black", "jq", "shellcheck", "stylua" },
+    ensure_installed = { "black", "codelldb", "jq", "rustfmt", "shellcheck", "stylua", "taplo" },
     automatic_installation = true,
     automatic_setup = true,
   })
