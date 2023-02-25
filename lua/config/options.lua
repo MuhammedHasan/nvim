@@ -52,7 +52,6 @@ opt.foldlevelstart = 99
 opt.foldenable = true
 opt.shada = "!,'0,f0,<50,s10,h"
 opt.sessionoptions = "buffers,curdir,globals,tabpages,winpos,winsize" -- Session options to store in the session
-opt.colorcolumn = "80" -- set color column to 80
 ---@diagnostic enable
 
 -- disable builtin plugins
